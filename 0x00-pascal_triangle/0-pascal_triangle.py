@@ -1,32 +1,36 @@
 #!/usr/bin/python3
 """
-This module contains 2 functions, they are responsible for
-creating the pascal's triangle
+This module provides functions to generate Pascal's Triangle.
 """
 
-
-def calculate_row(row_n, prev_list):
+def calculate_row(prev_row):
     """
-    Forming each row in the pascal's triangle
+    Generates the next row in Pascal's Triangle based on the previous row.
+    Args:
+        prev_row (list): The previous row in Pascal's Triangle.
+    Returns:
+        list: The next row in Pascal's Triangle.
     """
-    row_list = [1]
-    for i in range(1, row_n):
-        if i == row_n - 1:
-            row_list.append(1)
-        else:
-            row_list.append(prev_list[i] + prev_list[i - 1])
-    return row_list
-
+    row = [1]
+    for i in range(1, len(prev_row)):
+        row.append(prev_row[i] + prev_row[i - 1])
+    row.append(1)
+    return row
 
 def pascal_triangle(n):
     """
-    Forming the pascal's triangle, from the 1st row, to the nth row
+    Generates Pascal's Triangle up to the nth row.
+    Args:
+        n (int): The number of rows in Pascal's Triangle to generate.
+    Returns:
+        list of lists: Pascal's Triangle up to the nth row.
     """
-    if (n <= 0):
+    if n <= 0:
         return []
-    pasc_list = [[1]]
-    prev_list = [1]
-    for i in range(2, n + 1):
-        prev_list = calculate_row(i, prev_list)
-        pasc_list.append(prev_list)
-    return pasc_list
+
+    triangle = [[1]]  # Start with the first row
+    for i in range(1, n):
+        triangle.append(calculate_row(triangle[-1]))
+
+    return triangle
+
