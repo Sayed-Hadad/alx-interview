@@ -21,19 +21,34 @@ Write a method that determines if all the boxes can be opened.
 
 def canUnlockAll(boxes):
     """
-    parameters: boxes list
-    Return: True if all boxes can be opened, else return False
+    Determines if all boxes can be unlocked.
+    Args:
+        boxes (list of lists): A list where each sublist contains keys to other boxes.
+    Returns:
+        bool: True if all boxes can be unlocked, False otherwise.
     """
-    keys = boxes[0].copy()
-    keys_num = len(keys)
-    i = 0
-    while i < keys_num:
-        if (keys[i] < len(boxes)):
-            keys.extend(boxes[keys[i]])
-            boxes[keys[i]] = []
-            keys_num = len(keys)
-        i += 1
-    keys.append(0)
-    keys_unique = list(set(keys))
-    keys_unique = [k for k in keys_unique if k < len(boxes)]
-    return len(keys_unique) == len(boxes)
+    n = len(boxes)
+    unlocked = [False] * n  # List to keep track of which boxes have been unlocked
+    unlocked[0] = True  # The first box is unlocked by default
+    keys = [0]  # Start with the key to the first box
+
+    while keys:
+        current_key = keys.pop()
+        for key in boxes[current_key]:
+            if key < n and not unlocked[key]:
+                unlocked[key] = True
+                keys.append(key)
+
+    # Return True if all boxes are unlocked
+    return all(unlocked)
+
+# Test cases
+if __name__ == "__main__":
+    boxes = [[1], [2], [3], [4], []]
+    print(canUnlockAll(boxes))  # True
+
+    boxes = [[1, 4, 6], [2], [0, 4, 1], [5, 6, 2], [3], [4, 1], [6]]
+    print(canUnlockAll(boxes))  # True
+
+    boxes = [[1, 4], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]]
+    print(canUnlockAll(boxes))  # False
